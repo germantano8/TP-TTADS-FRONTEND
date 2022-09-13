@@ -9,6 +9,7 @@ import { CssBaseline } from '@mui/material'
 import { NextPage } from 'next'
 import lightTheme from '../styles/theme/lightTheme'
 import createEmotionCache from '../utility/createEmotionCache'
+import { OrderProvider } from '../components/order/useOrder'
 
 const clientSideEmotionCache = createEmotionCache()
 
@@ -30,10 +31,12 @@ const MyApp = ({ Component, pageProps }: AppPropsWithLayout) => {
   return (
     <QueryClientProvider client={queryClient}>
       <CacheProvider value={emotionCache}>
-        <ThemeProvider theme={lightTheme}>
-          <CssBaseline />
-          {getLayout(<Component {...pageProps} />)}
-        </ThemeProvider>
+        <OrderProvider>
+          <ThemeProvider theme={lightTheme}>
+            <CssBaseline />
+            {getLayout(<Component {...pageProps} />)}
+          </ThemeProvider>
+        </OrderProvider>
       </CacheProvider>
     </QueryClientProvider>
   )

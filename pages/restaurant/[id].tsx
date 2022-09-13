@@ -5,16 +5,20 @@ import type { NextPageContext } from 'next'
 import { Box } from '@mui/system'
 import { InfoOutlined, Star, Store } from '@mui/icons-material'
 import {
+  Backdrop,
   Button,
   Card,
   CardActionArea,
   CardContent,
   CardMedia,
-  Grid
+  Fade,
+  Grid,
+  Modal
 } from '@mui/material'
 import styles from '../../styles/Home.module.css'
 import Layout from '../../components/Layout/Layout'
 import withAuth from '../../utils/withAuth'
+import { useOrder } from '../../components/order/useOrder'
 
 const requestOptions = {
   method: 'GET',
@@ -23,7 +27,34 @@ const requestOptions = {
 
 const url = process.env.NEXT_PUBLIC_API_URL
 
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 500,
+  bgcolor: 'white',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4
+}
+
 const Restaurant = ({ restaurant: data, auth }: any) => {
+  const [open, setOpen] = React.useState(false)
+  const [selected, setSelected] = React.useState<any>()
+
+  const { addToOrder } = useOrder()
+
+  const handleOpen = (meal: any) => {
+    setOpen(true)
+    setSelected(meal)
+  }
+
+  const handleClose = () => {
+    setOpen(false)
+    setSelected(null)
+  }
+
   return (
     <Layout auth={auth}>
       <div className={styles.container}>
@@ -89,7 +120,7 @@ const Restaurant = ({ restaurant: data, auth }: any) => {
                 // eslint-disable-next-line no-underscore-dangle
                 <Grid item key={m._id}>
                   <Card sx={{ width: 345 }}>
-                    <CardActionArea>
+                    <CardActionArea onClick={() => handleOpen(m)}>
                       {m.img && (
                         <CardMedia
                           component="img"
@@ -110,6 +141,46 @@ const Restaurant = ({ restaurant: data, auth }: any) => {
             </Grid>
           )}
         </div>
+
+        {selected && (
+          <Modal
+            aria-labelledby="transition-modal-title"
+            aria-describedby="transition-modal-description"
+            open={open}
+            onClose={handleClose}
+            closeAfterTransition
+            BackdropComponent={Backdrop}
+            BackdropProps={{
+              timeout: 500
+            }}
+          >
+            <Fade in={open}>
+              <Box sx={style}>
+                {selected.img && (
+                  <CardMedia
+                    component="img"
+                    height="140"
+                    image={selected.img}
+                    alt={selected.alt}
+                  />
+                )}
+                <CardContent>
+                  <h2>{selected.name}</h2>
+                  <p>{selected.description}</p>
+                  <p>${selected.price}</p>
+                </CardContent>
+                <Button
+                  onClick={() => {
+                    addToOrder(selected)
+                    handleClose()
+                  }}
+                >
+                  Add
+                </Button>
+              </Box>
+            </Fade>
+          </Modal>
+        )}
       </div>
     </Layout>
   )
