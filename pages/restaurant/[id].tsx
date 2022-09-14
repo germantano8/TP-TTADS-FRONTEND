@@ -3,7 +3,12 @@
 import React from 'react'
 import type { NextPageContext } from 'next'
 import { Box } from '@mui/system'
-import { InfoOutlined, Star, Store } from '@mui/icons-material'
+import {
+  InfoOutlined,
+  ShoppingBagOutlined,
+  Star,
+  Store
+} from '@mui/icons-material'
 import {
   Backdrop,
   Badge,
@@ -209,9 +214,28 @@ const Restaurant = ({ restaurant: data, auth }: any) => {
           </Modal>
         )}
 
-        <Box>
-          <Badge badgeContent={quantity} color="primary" />
-          <Button>{`Pedido $${subtotal}`}</Button>
+        <Box my={3} position="absolute" bottom="0px">
+          <Button
+            variant="outlined"
+            sx={{
+              width: '200px',
+              display: 'flex',
+              justifyContent: 'space-between'
+            }}
+          >
+            <Badge
+              badgeContent={quantity}
+              color="primary"
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'right'
+              }}
+            >
+              <ShoppingBagOutlined />
+            </Badge>
+            <h4>Pedido</h4>
+            {`$${subtotal}`}
+          </Button>
         </Box>
       </div>
     </Layout>
