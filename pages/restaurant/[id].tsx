@@ -6,6 +6,7 @@ import { Box } from '@mui/system'
 import { InfoOutlined, Star, Store } from '@mui/icons-material'
 import {
   Backdrop,
+  Badge,
   Button,
   Card,
   CardActionArea,
@@ -15,6 +16,7 @@ import {
   Grid,
   Modal
 } from '@mui/material'
+import { BiMinus, BiPlus } from 'react-icons/bi'
 import styles from '../../styles/Home.module.css'
 import Layout from '../../components/Layout/Layout'
 import withAuth from '../../utils/withAuth'
@@ -42,10 +44,11 @@ const style = {
 const Restaurant = ({ restaurant: data, auth }: any) => {
   const [open, setOpen] = React.useState(false)
   const [selected, setSelected] = React.useState<any>()
-
-  const { addToOrder } = useOrder()
+  const [amount, setAmount] = React.useState(1)
+  const { addToOrder, subtotal, quantity } = useOrder()
 
   const handleOpen = (meal: any) => {
+    setAmount(1)
     setOpen(true)
     setSelected(meal)
   }
@@ -169,18 +172,47 @@ const Restaurant = ({ restaurant: data, auth }: any) => {
                   <p>{selected.description}</p>
                   <p>${selected.price}</p>
                 </CardContent>
-                <Button
-                  onClick={() => {
-                    addToOrder(selected)
-                    handleClose()
-                  }}
-                >
-                  Add
-                </Button>
+
+                <Box sx={{ display: 'flex' }}>
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center'
+                    }}
+                  >
+                    <Button
+                      onClick={() => setAmount(prev => Math.max(1, prev - 1))}
+                    >
+                      <BiMinus />
+                    </Button>
+                    <Box sx={{ width: '20px', textAlign: 'center' }}>
+                      {amount}
+                    </Box>
+                    <Button
+                      onClick={() => setAmount(prev => Math.min(10, prev + 1))}
+                    >
+                      <BiPlus />
+                    </Button>
+                  </Box>
+
+                  <Button
+                    onClick={() => {
+                      addToOrder(selected, amount)
+                      handleClose()
+                    }}
+                  >
+                    {`Agregar $${selected.price * amount}`}
+                  </Button>
+                </Box>
               </Box>
             </Fade>
           </Modal>
         )}
+
+        <Box>
+          <Badge badgeContent={quantity} color="primary" />
+          <Button>{`Pedido $${subtotal}`}</Button>
+        </Box>
       </div>
     </Layout>
   )

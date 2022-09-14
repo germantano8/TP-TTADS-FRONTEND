@@ -62,7 +62,7 @@ export const OrderProvider = ({ children }: any) => {
   }
 
   const subtotal = order.products.reduce(
-    (accumulator, p) => accumulator + p.pricePerUnit * p.quantity,
+    (accumulator, p) => accumulator + p.price * p.quantity,
     0
   )
 
