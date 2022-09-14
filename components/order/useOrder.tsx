@@ -7,7 +7,7 @@ import React, {
   useMemo
 } from 'react'
 
-const ORDER_STATE_KEY = 'cart'
+const ORDER_STATE_KEY = 'order'
 
 interface Order {
   products: any[]
@@ -37,7 +37,7 @@ export const OrderProvider = ({ children }: any) => {
   const [order, updateOrder] = useState<Order>({ products: [] })
 
   useEffect(() => {
-    const data = JSON.parse(sessionStorage.getItem(ORDER_STATE_KEY) ?? '')
+    const data = JSON.parse(sessionStorage.getItem(ORDER_STATE_KEY) ?? '{}')
     if (data) {
       updateOrder(data)
     }
@@ -76,13 +76,18 @@ export const OrderProvider = ({ children }: any) => {
     throw Error('Not implemented')
   }
 
-  return (
-    <OrderContext.Provider
-      value={{ order, addToOrder, checkout, subtotal, quantity }}
-    >
-      {children}
-    </OrderContext.Provider>
+  const value = useMemo(
+    () => ({
+      order,
+      addToOrder,
+      checkout,
+      subtotal,
+      quantity
+    }),
+    [order]
   )
+
+  return <OrderContext.Provider value={value}>{children}</OrderContext.Provider>
 }
 
 export const useOrder = () => useContext(OrderContext)
