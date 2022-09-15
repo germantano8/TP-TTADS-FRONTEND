@@ -107,9 +107,12 @@ const LoginForm = () => {
               )}
             </Button>
 
-            {mutation.isError && (
-              <span>{(mutation.error as Error).message}</span>
-            )}
+            {mutation.error &&
+              (mutation.error.response.data ? (
+                <span>{mutation.error.response.data.message}</span>
+              ) : (
+                <span>Server error</span>
+              ))}
           </Box>
         </Form>
       )}
