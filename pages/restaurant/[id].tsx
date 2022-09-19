@@ -3,30 +3,14 @@
 import React from 'react'
 import type { NextPageContext } from 'next'
 import { Box } from '@mui/system'
-import {
-  InfoOutlined,
-  ShoppingBagOutlined,
-  Star,
-  Store
-} from '@mui/icons-material'
-import {
-  Backdrop,
-  Badge,
-  Button,
-  Card,
-  CardActionArea,
-  CardContent,
-  CardMedia,
-  Fade,
-  Grid,
-  Modal
-} from '@mui/material'
-import { BiMinus, BiPlus } from 'react-icons/bi'
-import { useRouter } from 'next/router'
+import { InfoOutlined, Star, Store } from '@mui/icons-material'
+import { Backdrop, Button, Fade, Grid, Modal } from '@mui/material'
 import styles from '../../styles/Home.module.css'
 import Layout from '../../components/Layout/Layout'
 import withAuth from '../../utils/withAuth'
-import { useOrder } from '../../components/order/useOrder'
+import OrderItemModal from '../../components/order/OrderItemModal'
+import OrderButton from '../../components/order/OrderButton'
+import ProductCard from '../../components/order/ProductCard'
 
 const requestOptions = {
   method: 'GET',
@@ -35,27 +19,11 @@ const requestOptions = {
 
 const url = process.env.NEXT_PUBLIC_API_URL
 
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 500,
-  bgcolor: 'white',
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 4
-}
-
 const Restaurant = ({ restaurant: data, auth }: any) => {
-  const router = useRouter()
   const [open, setOpen] = React.useState(false)
   const [selected, setSelected] = React.useState<any>()
-  const [amount, setAmount] = React.useState(1)
-  const { addToOrder, subtotal, quantity } = useOrder()
 
   const handleOpen = (meal: any) => {
-    setAmount(1)
     setOpen(true)
     setSelected(meal)
   }
@@ -127,26 +95,7 @@ const Restaurant = ({ restaurant: data, auth }: any) => {
           {data.meals && (
             <Grid container sx={{ gap: '30px' }}>
               {data.meals.map((m: any) => (
-                // eslint-disable-next-line no-underscore-dangle
-                <Grid item key={m._id}>
-                  <Card sx={{ width: 345 }}>
-                    <CardActionArea onClick={() => handleOpen(m)}>
-                      {m.img && (
-                        <CardMedia
-                          component="img"
-                          height="140"
-                          image={m.img}
-                          alt={m.alt}
-                        />
-                      )}
-                      <CardContent>
-                        <h2>{m.name}</h2>
-                        <p>{m.description}</p>
-                        <p>${m.price}</p>
-                      </CardContent>
-                    </CardActionArea>
-                  </Card>
-                </Grid>
+                <ProductCard product={m} handleOpen={handleOpen} />
               ))}
             </Grid>
           )}
@@ -165,81 +114,14 @@ const Restaurant = ({ restaurant: data, auth }: any) => {
             }}
           >
             <Fade in={open}>
-              <Box sx={style}>
-                {selected.img && (
-                  <CardMedia
-                    component="img"
-                    height="140"
-                    image={selected.img}
-                    alt={selected.alt}
-                  />
-                )}
-                <CardContent>
-                  <h2>{selected.name}</h2>
-                  <p>{selected.description}</p>
-                  <p>${selected.price}</p>
-                </CardContent>
-
-                <Box sx={{ display: 'flex' }}>
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      alignItems: 'center'
-                    }}
-                  >
-                    <Button
-                      onClick={() => setAmount(prev => Math.max(1, prev - 1))}
-                    >
-                      <BiMinus />
-                    </Button>
-                    <Box sx={{ width: '20px', textAlign: 'center' }}>
-                      {amount}
-                    </Box>
-                    <Button
-                      onClick={() => setAmount(prev => Math.min(10, prev + 1))}
-                    >
-                      <BiPlus />
-                    </Button>
-                  </Box>
-
-                  <Button
-                    onClick={() => {
-                      addToOrder(selected, amount)
-                      handleClose()
-                    }}
-                  >
-                    {`Agregar $${selected.price * amount}`}
-                  </Button>
-                </Box>
+              <Box>
+                <OrderItemModal selected={selected} handleClose={handleClose} />
               </Box>
             </Fade>
           </Modal>
         )}
 
-        <Box my={3} position="absolute" bottom="0px">
-          <Button
-            variant="outlined"
-            sx={{
-              width: '200px',
-              display: 'flex',
-              justifyContent: 'space-between'
-            }}
-            onClick={() => router.replace('/checkout/order')}
-          >
-            <Badge
-              badgeContent={quantity}
-              color="primary"
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'right'
-              }}
-            >
-              <ShoppingBagOutlined />
-            </Badge>
-            <h4>Pedido</h4>
-            {`$${subtotal}`}
-          </Button>
-        </Box>
+        <OrderButton />
       </div>
     </Layout>
   )
