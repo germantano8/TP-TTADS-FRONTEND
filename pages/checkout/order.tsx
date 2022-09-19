@@ -2,6 +2,7 @@ import { Box, Card, Divider, Typography } from '@mui/material'
 import { useRouter } from 'next/router'
 import React from 'react'
 import Layout from '../../components/Layout/Layout'
+import ProductMultiplier from '../../components/order/ProductMultiplier'
 import { useOrder } from '../../components/order/useOrder'
 
 const OrderCheckoutPage = () => {
@@ -9,11 +10,7 @@ const OrderCheckoutPage = () => {
   const router = useRouter()
 
   if (!order || isEmpty) {
-    return (
-      <Layout auth={null}>
-        <Typography>No hay una orden activa</Typography>
-      </Layout>
-    )
+    return router.back()
   }
 
   return (
@@ -38,11 +35,12 @@ const OrderCheckoutPage = () => {
                 display: 'inline-flex',
                 padding: '10px',
                 margin: '5px',
-                justifyContent: 'space-between'
+                justifyContent: 'space-between',
+                alignItems: 'center'
               }}
             >
               <p>{p.name}</p>
-              <p>{`x ${p.quantity}`}</p>
+              <ProductMultiplier product={p} />
               <p>{`$${p.quantity * p.price}`}</p>
             </Card>
           ))}

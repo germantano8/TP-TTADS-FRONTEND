@@ -16,7 +16,7 @@ const OrderButton = () => {
           display: 'flex',
           justifyContent: 'space-between'
         }}
-        onClick={() => router.replace('/checkout/order')}
+        onClick={() => router.push('/checkout/order')}
       >
         <Badge
           badgeContent={quantity}
