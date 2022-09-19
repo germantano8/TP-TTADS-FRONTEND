@@ -22,6 +22,7 @@ import {
   Modal
 } from '@mui/material'
 import { BiMinus, BiPlus } from 'react-icons/bi'
+import { useRouter } from 'next/router'
 import styles from '../../styles/Home.module.css'
 import Layout from '../../components/Layout/Layout'
 import withAuth from '../../utils/withAuth'
@@ -47,6 +48,7 @@ const style = {
 }
 
 const Restaurant = ({ restaurant: data, auth }: any) => {
+  const router = useRouter()
   const [open, setOpen] = React.useState(false)
   const [selected, setSelected] = React.useState<any>()
   const [amount, setAmount] = React.useState(1)
@@ -222,6 +224,7 @@ const Restaurant = ({ restaurant: data, auth }: any) => {
               display: 'flex',
               justifyContent: 'space-between'
             }}
+            onClick={() => router.replace('/checkout/order')}
           >
             <Badge
               badgeContent={quantity}

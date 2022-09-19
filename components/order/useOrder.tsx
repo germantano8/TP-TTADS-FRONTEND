@@ -19,6 +19,7 @@ export interface OrderContextData {
   checkout: () => void
   subtotal: number
   quantity: number
+  isEmpty: boolean
 }
 
 export const orderContextDefaultValue: OrderContextData = {
@@ -26,11 +27,12 @@ export const orderContextDefaultValue: OrderContextData = {
   addToOrder: () => null,
   checkout: () => null,
   subtotal: 0,
-  quantity: 0
+  quantity: 0,
+  isEmpty: true
 }
 
 export const OrderContext = createContext<OrderContextData>(
-  orderContextDefaultValue
+  {} as OrderContextData
 )
 
 export const OrderProvider = ({ children }: any) => {
@@ -71,6 +73,8 @@ export const OrderProvider = ({ children }: any) => {
     0
   )
 
+  const isEmpty = order.products.length === 0
+
   const checkout = () => {
     // TODO: create order in backend
     throw Error('Not implemented')
@@ -82,7 +86,8 @@ export const OrderProvider = ({ children }: any) => {
       addToOrder,
       checkout,
       subtotal,
-      quantity
+      quantity,
+      isEmpty
     }),
     [order]
   )
