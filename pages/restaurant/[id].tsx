@@ -4,17 +4,13 @@ import React from 'react'
 import type { NextPageContext } from 'next'
 import { Box } from '@mui/system'
 import { InfoOutlined, Star, Store } from '@mui/icons-material'
-import {
-  Button,
-  Card,
-  CardActionArea,
-  CardContent,
-  CardMedia,
-  Grid
-} from '@mui/material'
+import { Backdrop, Button, Fade, Grid, Modal } from '@mui/material'
 import styles from '../../styles/Home.module.css'
 import Layout from '../../components/Layout/Layout'
 import withAuth from '../../utils/withAuth'
+import OrderItemModal from '../../components/order/OrderItemModal'
+import OrderButton from '../../components/order/OrderButton'
+import ProductCard from '../../components/order/ProductCard'
 
 const requestOptions = {
   method: 'GET',
@@ -24,6 +20,19 @@ const requestOptions = {
 const url = process.env.NEXT_PUBLIC_API_URL
 
 const Restaurant = ({ restaurant: data, auth }: any) => {
+  const [open, setOpen] = React.useState(false)
+  const [selected, setSelected] = React.useState<any>()
+
+  const handleOpen = (meal: any) => {
+    setOpen(true)
+    setSelected(meal)
+  }
+
+  const handleClose = () => {
+    setOpen(false)
+    setSelected(null)
+  }
+
   return (
     <Layout auth={auth}>
       <div className={styles.container}>
@@ -86,30 +95,33 @@ const Restaurant = ({ restaurant: data, auth }: any) => {
           {data.meals && (
             <Grid container sx={{ gap: '30px' }}>
               {data.meals.map((m: any) => (
-                // eslint-disable-next-line no-underscore-dangle
-                <Grid item key={m._id}>
-                  <Card sx={{ width: 345 }}>
-                    <CardActionArea>
-                      {m.img && (
-                        <CardMedia
-                          component="img"
-                          height="140"
-                          image={m.img}
-                          alt={m.alt}
-                        />
-                      )}
-                      <CardContent>
-                        <h2>{m.name}</h2>
-                        <p>{m.description}</p>
-                        <p>${m.price}</p>
-                      </CardContent>
-                    </CardActionArea>
-                  </Card>
-                </Grid>
+                <ProductCard product={m} handleOpen={handleOpen} />
               ))}
             </Grid>
           )}
         </div>
+
+        {selected && (
+          <Modal
+            aria-labelledby="transition-modal-title"
+            aria-describedby="transition-modal-description"
+            open={open}
+            onClose={handleClose}
+            closeAfterTransition
+            BackdropComponent={Backdrop}
+            BackdropProps={{
+              timeout: 500
+            }}
+          >
+            <Fade in={open}>
+              <Box>
+                <OrderItemModal selected={selected} handleClose={handleClose} />
+              </Box>
+            </Fade>
+          </Modal>
+        )}
+
+        <OrderButton />
       </div>
     </Layout>
   )

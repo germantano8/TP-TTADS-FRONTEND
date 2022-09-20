@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { Container, Grid, TextField, Box, Typography } from '@mui/material'
-import Link from 'next/link'
 import withAuth from '../../utils/withAuth'
 import RestaurantCard from '../../components/RestaurantCard'
 import TagCard from '../../components/TagCard'
@@ -58,17 +57,11 @@ const RestaurantHomePage = ({ initialRestaurants, tags, auth }: Props) => {
                     restaurant.name.toLowerCase().includes(filter)
                   )
                   .map((restaurant: any) => {
-                    // eslint-disable-next-line no-underscore-dangle
-                    const ref = `restaurant/${restaurant._id}`
                     return (
-                      <Link href={ref} passHref>
-                        <a href={ref}>
-                          <RestaurantCard
-                            restaurant={restaurant}
-                            userLocation={location}
-                          />
-                        </a>
-                      </Link>
+                      <RestaurantCard
+                        restaurant={restaurant}
+                        userLocation={location}
+                      />
                     )
                   })}
             </Grid>
