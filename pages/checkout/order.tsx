@@ -1,9 +1,18 @@
-import { Box, Card, Divider, Typography } from '@mui/material'
-import { useRouter } from 'next/router'
 import React from 'react'
+import { useRouter } from 'next/router'
+import { KeyboardArrowLeft } from '@mui/icons-material'
+import {
+  Box,
+  Button,
+  Card,
+  Divider,
+  IconButton,
+  Typography
+} from '@mui/material'
 import Layout from '../../components/Layout/Layout'
 import ProductMultiplier from '../../components/order/ProductMultiplier'
 import { useOrder } from '../../components/order/useOrder'
+import OrderCheckoutStepper from '../../components/order/OrderCheckoutStepper'
 
 const OrderCheckoutPage = () => {
   const { order, subtotal, isEmpty } = useOrder()
@@ -15,10 +24,15 @@ const OrderCheckoutPage = () => {
 
   return (
     <Layout auth={null}>
-      <button type="button" onClick={router.back}>
-        Atras
-      </button>
-      <h1>Checkout</h1>
+      <Box sx={{ display: 'flex' }}>
+        <IconButton onClick={router.back}>
+          <KeyboardArrowLeft />
+        </IconButton>
+
+        <h1>Checkout</h1>
+      </Box>
+
+      <OrderCheckoutStepper />
 
       <Box sx={{ display: 'grid' }}>
         <Box
@@ -70,6 +84,14 @@ const OrderCheckoutPage = () => {
           </Box>
         </Card>
       </Box>
+
+      <Button
+        variant="contained"
+        color="secondary"
+        onClick={() => router.push('payment')}
+      >
+        Pagar
+      </Button>
     </Layout>
   )
 }
