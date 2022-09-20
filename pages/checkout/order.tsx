@@ -45,6 +45,8 @@ const OrderCheckoutPage = () => {
           <Typography>Estas llevando: </Typography>
           {order.products.map(p => (
             <Card
+              // eslint-disable-next-line no-underscore-dangle
+              key={p._id}
               sx={{
                 display: 'inline-flex',
                 padding: '10px',
@@ -53,9 +55,13 @@ const OrderCheckoutPage = () => {
                 alignItems: 'center'
               }}
             >
-              <p>{p.name}</p>
+              <Box sx={{ width: '200px', textAlign: 'left' }}>
+                <p>{p.name}</p>
+              </Box>
               <ProductMultiplier product={p} />
-              <p>{`$${p.quantity * p.price}`}</p>
+              <Box sx={{ width: '70px', textAlign: 'right' }}>
+                <p>{`$${p.quantity * p.price}`}</p>
+              </Box>
             </Card>
           ))}
         </Box>

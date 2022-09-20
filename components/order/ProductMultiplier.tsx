@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import React, { useEffect } from 'react'
 import { Box, IconButton } from '@mui/material'
 import { BiMinus, BiPlus, BiTrash } from 'react-icons/bi'
@@ -5,10 +6,9 @@ import { useOrder } from './useOrder'
 
 const ProductMultiplier = ({ product, limit = 10 }: any) => {
   const [count, setCount] = React.useState<number>(product.quantity)
-  const { updateItem } = useOrder()
+  const { updateItem, removeItem } = useOrder()
 
   useEffect(() => {
-    // eslint-disable-next-line no-underscore-dangle
     updateItem(product._id, count)
   }, [count])
 
@@ -23,13 +23,15 @@ const ProductMultiplier = ({ product, limit = 10 }: any) => {
         borderRadius: '1rem'
       }}
     >
-      <IconButton onClick={() => setCount(prev => Math.max(0, prev - 1))}>
-        {count === 1 ? (
+      {count === 1 ? (
+        <IconButton onClick={() => removeItem(product._id)}>
           <BiTrash fontSize="small" color="black" />
-        ) : (
+        </IconButton>
+      ) : (
+        <IconButton onClick={() => setCount(prev => Math.max(1, prev - 1))}>
           <BiMinus fontSize="small" color="black" />
-        )}
-      </IconButton>
+        </IconButton>
+      )}
 
       <Box sx={{ width: '20px', textAlign: 'center', fontWeight: '600' }}>
         {count}
