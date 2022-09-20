@@ -1,5 +1,5 @@
 import { KeyboardArrowLeft } from '@mui/icons-material'
-import { Box, Card, Divider, IconButton, Typography } from '@mui/material'
+import { Box, IconButton, Typography } from '@mui/material'
 import LoadingButton from '@mui/lab/LoadingButton'
 import { useRouter } from 'next/router'
 import React from 'react'
@@ -7,9 +7,10 @@ import { Formik, Form } from 'formik'
 import Layout from '../../components/Layout/Layout'
 import OrderCheckoutStepper from '../../components/order/OrderCheckoutStepper'
 import { useOrder } from '../../components/order/useOrder'
+import OrderDetail from '../../components/order/OrderDetail'
 
 const PaymentCheckoutPage = () => {
-  const { subtotal, order } = useOrder()
+  const { order } = useOrder()
   const router = useRouter()
 
   const handlePayment = () => {
@@ -30,29 +31,7 @@ const PaymentCheckoutPage = () => {
 
       <Box>
         <Typography fontWeight="bold">Resumen del pedido</Typography>
-        <Card
-          sx={{
-            display: 'inline-grid',
-            gap: '3px',
-            width: '260px',
-            padding: '14px',
-            margin: '5px'
-          }}
-        >
-          <Box sx={{ display: 'inline-flex', justifyContent: 'space-between' }}>
-            <Typography>Productos</Typography>
-            <Typography>{`$${subtotal}`}</Typography>
-          </Box>
-          <Box sx={{ display: 'inline-flex', justifyContent: 'space-between' }}>
-            <Typography>Envio</Typography>
-            <Typography>{`$${0}`}</Typography>
-          </Box>
-          <Divider />
-          <Box sx={{ display: 'inline-flex', justifyContent: 'space-between' }}>
-            <Typography fontWeight="bold">Total</Typography>
-            <Typography fontWeight="bold">{`$${subtotal + 0}`}</Typography>
-          </Box>
-        </Card>
+        <OrderDetail />
       </Box>
 
       <Formik initialValues={{}} onSubmit={handlePayment}>
