@@ -1,17 +1,17 @@
 import React from 'react'
 import * as Yup from 'yup'
 import { Field, Form, Formik } from 'formik'
-
+import Typograhy from '@mui/material/Typography';
+import Link from '@mui/material/Link';
 import {
   Box,
-  Button,
   CircularProgress,
   InputAdornment,
-  TextField
 } from '@mui/material'
 import AlternateEmailIcon from '@mui/icons-material/AlternateEmail'
 import LockIcon from '@mui/icons-material/Lock'
-
+import Button from '../Common/Button';
+import TextField from '../Common/TextField';
 import { useMutation } from '@tanstack/react-query'
 
 import axios from 'axios'
@@ -65,7 +65,7 @@ const LoginForm = () => {
                 helperText={touched.email && errors.email}
                 margin="dense"
                 InputProps={{
-                  endAdornment: (
+                  startAdornment: (
                     <InputAdornment position="end">
                       <AlternateEmailIcon fontSize="small" />
                     </InputAdornment>
@@ -85,7 +85,7 @@ const LoginForm = () => {
                 helperText={touched.password && errors.password}
                 margin="dense"
                 InputProps={{
-                  endAdornment: (
+                  startAdornment: (
                     <InputAdornment position="end">
                       <LockIcon fontSize="small" />
                     </InputAdornment>
@@ -95,7 +95,6 @@ const LoginForm = () => {
             </Box>
 
             <Button
-              color="secondary"
               variant="contained"
               type="submit"
               disabled={mutation.isLoading}
@@ -107,12 +106,15 @@ const LoginForm = () => {
               )}
             </Button>
 
+            <Typograhy textAlign={"center"}>¿No tienes una cuenta creada? <Link href='/register'>Registrarse</Link></Typograhy>
+
             {mutation.error &&
               (mutation.error.response.data ? (
-                <span>{mutation.error.response.data.message}</span>
+                <Typograhy color="error">Usuario y/o Contraseña incorrectos</Typograhy>
               ) : (
-                <span>Server error</span>
+                <Typograhy color="error">Server error</Typograhy>
               ))}
+
           </Box>
         </Form>
       )}

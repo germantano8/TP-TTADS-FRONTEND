@@ -13,6 +13,7 @@ import { useRouter, NextRouter } from 'next/router'
 import Box from '@mui/material/Box'
 import { List, Menu } from '@mui/material'
 import ROUTES from './routes'
+import {globalTheme} from '../../styles/theme/globalTheme';
 
 /* -----------------------------------------------IMPORTANTE---------------------------------------------------------------*/
 
@@ -42,7 +43,7 @@ const Navbar = ({ auth }: NavbarProps) => {
       <Box
         component="nav"
         sx={{
-          background: '#F76776',
+          background: globalTheme.palette.primary.main,
           color: '#ffffff',
           padding: '0.5rem 1rem',
           display: 'flex',
@@ -82,7 +83,7 @@ const Navbar = ({ auth }: NavbarProps) => {
               <Avatar
                 sx={{
                   bgcolor: '#FFFFFF',
-                  color: '#F76776',
+                  color: globalTheme.palette.primary.main,
                   width: 32,
                   height: 32,
                   fontSize: '0.8rem'
@@ -201,12 +202,12 @@ const DropdownItem = ({
 
   return (
     <MenuItem
-      sx={{ color: '#F76776', '&:hover': { background: '#F5B4BB' } }}
+      sx={{ color: globalTheme.palette.primary.main, '&:hover': { background: '#F5B4BB' } }}
       onClick={handleItemClick}
     >
       <ListItemIcon>
         {React.cloneElement(icon as React.ReactElement<any>, {
-          color: '#F76776'
+          color: globalTheme.palette.primary.main
         })}
       </ListItemIcon>
       <ListItemText>{text}</ListItemText>
@@ -260,7 +261,7 @@ const ResponsiveDropdown = ({
     <Box
       sx={{
         height: menuIsOpen ? 'calc(100% - 64px)' : '0',
-        background: '#F76776',
+        background: globalTheme.palette.primary.main,
         position: 'fixed',
         top: '64px',
         zIndex: 999,
@@ -287,7 +288,7 @@ const ResponsiveDropdown = ({
               alt="avatar"
               sx={{
                 bgcolor: '#FFFFFF',
-                color: '#F76776',
+                color: globalTheme.palette.primary.main,
                 width: 32,
                 height: 32,
                 fontSize: '0.8rem'

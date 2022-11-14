@@ -3,6 +3,7 @@ import type { NextPage } from 'next'
 import { Box, Card, Typography } from '@mui/material'
 import withAuth from '../utils/withAuth'
 import LoginForm from '../components/login/LoginForm'
+import { globalTheme } from '../styles/theme/globalTheme'
 
 const LoginPage: NextPage<{ auth: Auth }> = () => {
   return (
@@ -12,17 +13,15 @@ const LoginPage: NextPage<{ auth: Auth }> = () => {
       alignItems="center"
       minHeight="100vh"
       sx={{
-        backgroundImage: `url('/db8907208b387dedf183982486f262f8.jpg')`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center'
+        background: globalTheme.palette.primary.main,
       }}
     >
-      <Card>
-        <Box sx={{ textAlign: 'center', mt: '30px' }}>
-          <h1>Bienvenido</h1>
+      <Card sx={{ width: "650px", padding: "2rem", overflowY: "auto" }}>
+        <Box sx={{ textAlign: 'center' }}>
+          <Typography variant="h4">Bienvenido</Typography>
           <Typography fontWeight="light">Inicia sesión en tu cuenta</Typography>
         </Box>
-        <Box sx={{ padding: '20px', margin: '20px', width: '450px' }}>
+        <Box>
           <LoginForm />
         </Box>
       </Card>
